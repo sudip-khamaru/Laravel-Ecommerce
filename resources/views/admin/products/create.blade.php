@@ -20,7 +20,7 @@
 		Add Product
 	@endif
 </h2>
-<form method="POST" action="@if( isset( $select_product ) && $select_product->count() > 0 ) {{ route( 'admin.products.update', $select_product->id ) }} @else {{ route( 'admin.products.store' ) }} @endif" accept-charset="UTF-8">
+<form method="POST" action="@if( isset( $select_product ) && $select_product->count() > 0 ) {{ route( 'admin.products.update', $select_product->id ) }} @else {{ route( 'admin.products.store' ) }} @endif" accept-charset="UTF-8" enctype="multipart/form-data">
 	@csrf
 	@if( isset( $select_product ) && $select_product->count() > 0 )
 		@method( 'PUT' )

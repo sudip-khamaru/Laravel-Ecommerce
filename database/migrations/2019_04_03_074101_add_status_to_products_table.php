@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddSlugToCategoriesTable extends Migration
+class AddStatusToProductsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class AddSlugToCategoriesTable extends Migration
      */
     public function up()
     {
-        Schema::table('categories', function (Blueprint $table) {
+        Schema::table('products', function (Blueprint $table) {
             
-            $table->string( 'slug' )->after( 'title' )->nullable();
+            $table->boolean( 'status' )->after( 'featured' )->default( 0 );
 
         });
     }
@@ -27,10 +27,10 @@ class AddSlugToCategoriesTable extends Migration
      */
     public function down()
     {
-        Schema::table('categories', function (Blueprint $table) {
+        Schema::table('products', function (Blueprint $table) {
             
-            $table->dropColumn( 'slug' );
-            
+            $table->dropColumn( 'status' );
+
         });
     }
 }
