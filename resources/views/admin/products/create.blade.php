@@ -4,7 +4,7 @@
 <li class="breadcrumb-item"><a href="{{ route( 'admin.dashboard' ) }}">Dashboard</a></li>
 <li class="breadcrumb-item"><a href="{{ route( 'admin.products.index' ) }}">Products</a></li>
 <li class="breadcrumb-item active" aria-current="page">
-	@if( isset( $select_product ) && $select_product->count() > 0 )
+	@if( isset( $product ) && $product->count() > 0 )
 		Edit Product
 	@else
 		Add Product
@@ -14,15 +14,15 @@
 
 @section( 'content' )
 <h2 class="modal-title">
-	@if( isset( $select_product ) && $select_product->count() > 0 )
+	@if( isset( $product ) && $product->count() > 0 )
 		Edit Product
 	@else
 		Add Product
 	@endif
 </h2>
-<form method="POST" action="@if( isset( $select_product ) && $select_product->count() > 0 ) {{ route( 'admin.products.update', $select_product->id ) }} @else {{ route( 'admin.products.store' ) }} @endif" accept-charset="UTF-8" enctype="multipart/form-data">
+<form method="POST" action="@if( isset( $product ) && $product->count() > 0 ) {{ route( 'admin.products.update', $product->slug ) }} @else {{ route( 'admin.products.store' ) }} @endif" accept-charset="UTF-8" enctype="multipart/form-data">
 	@csrf
-	@if( isset( $select_product ) && $select_product->count() > 0 )
+	@if( isset( $product ) && $product->count() > 0 )
 		@method( 'PUT' )
 	@endif
 	<div class="row">
@@ -50,9 +50,9 @@
 			
 				<div class="col-sm-12">
 					<label for="txturl" class="form-control-label">Title:</label>
-					<input type="text" id="txturl" name="title" class="form-control" value="{{ @$select_product->title }}">
-					<p class="small">{{ config( 'app.url' ) }}/<span id="url">{{ @$select_product->slug }}</span>
-						<input type="hidden" name="slug" id="slug" value="{{ @$select_product->slug }}">
+					<input type="text" id="txturl" name="title" class="form-control" value="{{ @$product->title }}">
+					<p class="small">{{ config( 'app.url' ) }}/<span id="url">{{ @$product->slug }}</span>
+						<input type="hidden" name="slug" id="slug" value="{{ @$product->slug }}">
 					</p>
 				</div>
 			</div>
@@ -60,7 +60,7 @@
 			<div class="form-group row">
 				<div class="col-sm-12">
 					<label for="editor" class="form-control-label">Description:</label>
-					<textarea id="editor" name="description" class="form-control" rows="10" cols="80">{!! @$select_product->description !!}</textarea>
+					<textarea id="editor" name="description" class="form-control" rows="10" cols="80">{!! @$product->description !!}</textarea>
 				</div>
 			</div>
 
@@ -71,7 +71,7 @@
 						<div class="input-group-prepend">
 							<span class="input-group-text" id="basic-addon1">$</span>
 						</div>
-						<input type="text" class="form-control" placeholder="0.00" aria-label="Username" aria-describedby="basic-addon1" name="price" value="{{ @$select_product->price }}" id="basic-addon1-price"/>
+						<input type="text" class="form-control" placeholder="0.00" aria-label="Username" aria-describedby="basic-addon1" name="price" value="{{ @$product->price }}" id="basic-addon1-price"/>
 					</div>
 				</div>
 				<div class="col-6">
@@ -80,7 +80,7 @@
 						<div class="input-group-prepend">
 							<span class="input-group-text" id="basic-addon2">$</span>
 						</div>
-						<input type="text" class="form-control" name="discount_price" placeholder="0.00" aria-label="discount_price" aria-describedby="discount" value="{{ @$select_product->discount_price }}" id="basic-addon2-price"/>
+						<input type="text" class="form-control" name="discount_price" placeholder="0.00" aria-label="discount_price" aria-describedby="discount" value="{{ @$product->discount_price }}" id="basic-addon2-price"/>
 					</div>
 				</div>
 			</div>
@@ -108,13 +108,13 @@
 				<li class="list-group-item">
 					<div class="form-group row">
 						<select class="form-control" id="status" name="status">
-							<option value="0" @if( isset( $select_product ) && $select_product->status == 0 ) {{ "selected" }} @endif>Pending</option>
-							<option value="1" @if( isset( $select_product ) && $select_product->status == 1 ) {{ "selected" }} @endif>Publish</option>
+							<option value="0" @if( isset( $product ) && $product->status == 0 ) {{ "selected" }} @endif>Pending</option>
+							<option value="1" @if( isset( $product ) && $product->status == 1 ) {{ "selected" }} @endif>Publish</option>
 						</select>
 					</div>
 					<div class="form-group row">
 						<div class="col-lg-12">
-						@if( isset( $select_product ) )
+						@if( isset( $product ) )
 							<input type="submit" name="submit" class="btn btn-primary btn-block" value="Update Product" />
 						@else
 							<input type="submit" name="submit" class="btn btn-primary btn-block" value="Add Product" />
@@ -131,21 +131,21 @@
 						</div>
 					</div>
 					<div class="img-thumbnail text-center">
-						<img src="@if( isset( $select_product )) {{ asset( 'storage/' . $select_product->thumbnail ) }} @else {{ asset( 'images/no-thumbnail.jpeg' ) }} @endif" id="imgthumbnail" class="img-fluid" alt="">
+						<img src="@if( isset( $product )) {{ asset( 'storage/' . $product->thumbnail ) }} @else {{ asset( 'images/no-thumbnail.jpeg' ) }} @endif" id="imgthumbnail" class="img-fluid" alt="">
 					</div>
 				</li>
 				<li class="list-group-item">
 					<div class="col-12">
 						<div class="input-group mb-3">
 							<div class="input-group-prepend">
-								<span class="input-group-text" ><input id="featured" type="checkbox" name="featured" value="@if( isset( $select_product ) ) {{ @$select_product->featured }} @else{{ 0 }} @endif" @if( isset( $select_product ) && $select_product->featured == 1 ) {{ "checked" }} @endif /></span>
+								<span class="input-group-text" ><input id="featured" type="checkbox" name="featured" value="@if( isset( $product ) ) {{ @$product->featured }} @else{{ 0 }} @endif" @if( isset( $product ) && $product->featured == 1 ) {{ "checked" }} @endif /></span>
 							</div>
 							<p type="text" class="form-control" name="featured" placeholder="0.00" aria-label="featured" aria-describedby="featured" >Featured Product</p>
 						</div>
 					</div>
 				</li>
 				@php
-					$selected_ids = ( isset( $select_product ) && $select_product->categories->count() > 0 ) ? array_pluck( $select_product->categories->toArray(), 'id' ) : null;
+					$selected_ids = ( isset( $product ) && $product->categories->count() > 0 ) ? array_pluck( $product->categories->toArray(), 'id' ) : null;
 				@endphp
 				<li class="list-group-item active"><h5><label for="select2">Select Categories</label></h5></li>
 				<li class="list-group-item ">
@@ -181,13 +181,21 @@ $( function() {
 
 	} );
 
-	$( '#txturl' ).on( 'keyup', function() {
+	@php
+	if( !isset( $product ) ) {
+	@endphp
 
-		var getText = slugify( $( this ).val() );
-		$( '#url' ).html( getText );
-		$( '#slug' ).val( getText );
+		$( '#txturl' ).on( 'keyup', function() {
 
-	} );
+			var getText = slugify( $( this ).val() );
+			$( '#url' ).html( getText );
+			$( '#slug' ).val( getText );
+
+		} );
+
+	@php
+	}
+	@endphp	
 
 	$( '#select2' ).select2( {
 
@@ -251,14 +259,11 @@ $( function() {
 
 	$( '#featured' ).on( 'change', function() {
 
-		if( $( this ).is( ":checked" ) )
-		{
+		if( $( this ).is( ":checked" ) ) {
 	
 			$( this ).val( 1 );
 	
-		}
-		else
-		{
+		} else {
 	
 			$( this ).val( 0 );
 	

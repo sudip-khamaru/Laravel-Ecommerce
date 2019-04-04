@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Category;
+use App\CategoryParent;
 use App\Http\Requests\ValidateProduct;
 use App\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProductsController extends Controller
 {
@@ -47,12 +49,17 @@ class ProductsController extends Controller
     public function store(ValidateProduct $request)
     {
         
-        // dd( $request->all() );
-        $extension = "." . $request->thumbnail->getClientOriginalExtension();
-        $name = basename( $request->thumbnail->getClientOriginalName(), $extension ) . time();
-        $thumbnail = $name . $extension;
-        // $path = $request->thumbnail->store( 'images' );
-        $path = $request->thumbnail->storeAs( 'images', $thumbnail );
+        $path = 'images/no-thumbnail.jpeg';
+        
+        if( $request->has( 'thumbnail' ) ) {
+
+            $extension = "." . $request->thumbnail->getClientOriginalExtension();
+            $name = basename( $request->thumbnail->getClientOriginalName(), $extension ) . time();
+            $thumbnail = $name . $extension;
+            // $path = $request->thumbnail->store( 'images' );
+            $path = $request->thumbnail->storeAs( 'images', $thumbnail, 'public' );
+
+        }
 
         // if success, store into products table
         $product = Product::create( [
@@ -79,7 +86,7 @@ class ProductsController extends Controller
         
         } else {
 
-            return back()->with( 'message', "Error Adding Product" );
+            return back()->with( 'message', "Error Adding Product!" );
 
         } 
 
@@ -104,7 +111,12 @@ class ProductsController extends Controller
      */
     public function edit(Product $product)
     {
-        //
+        
+        $categories = Category::all();
+        // $categories = Category::with( 'childrens' )->get();
+
+        return view( 'admin.products.create', compact( 'product', 'categories' ) );
+
     }
 
     /**
@@ -116,7 +128,46 @@ class ProductsController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        //
+        
+        if( $request->has( 'thumbnail' ) ) {
+
+            Storage::disk( 'public' )->delete( $product->thumbnail );
+
+            $extension = "." . $request->thumbnail->getClientOriginalExtension();
+            $name = basename( $request->thumbnail->getClientOriginalName(), $extension ) . time();
+            $thumbnail = $name . $extension;
+            // $path = $request->thumbnail->store( 'images' );
+            $path = $request->thumbnail->storeAs( 'images', $thumbnail, 'public' );
+
+            $product->thumbnail = $path;
+
+        }
+
+        $product->title = $request->title;
+        // $product->slug = $request->slug;
+        $product->description = $request->description;
+        $product->price = $request->price;
+        $product->discount_price = ( $request->discount_price ) ? $request->discount_price : 0;
+        $product->discount = ( $request->discount ) ? $request->discount : 0;
+        $product->featured = ( $request->featured ) ? $request->featured : 0;
+        $product->status = $request->status;
+
+        $product->categories()->detach();
+
+        if( $product->save() ) {
+
+            // store category in category_product table
+            $product->categories()->attach( $request->category_id, [ 'created_at' => now(), 'updated_at' => now() ] );
+
+            // redirect
+            return back()->with( 'message', "Product Updated Successfully!" );
+        
+        } else {
+
+            return back()->with( 'message', "Error Updating Product!" );
+
+        } 
+
     }
 
     /**
@@ -127,6 +178,90 @@ class ProductsController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+        
+        if( $product->categories()->count() > 0 ) {
+
+            $product->categories()->detach(); 
+
+        }
+
+        if( $product->forceDelete() ) {
+
+            Storage::disk( 'public' )->delete( $product->thumbnail );
+
+            return back()->with( 'message', "Product Deleted Successfully!" );
+
+        } else {
+
+            return back()->with( 'message', "Error Deleting Product!" );
+
+        }
+
+    }
+
+    public function remove( Product $product )
+    {
+        
+        if( $product->delete() ) {
+
+            return back()->with( 'message', "Product Trashed Successfully!" );
+
+        } else {
+
+            return back()->with( 'message', "Error Trashing Product!" );
+
+        }
+
+    }
+
+    public function trash()
+    {
+        
+        $products = Product::onlyTrashed()->paginate( 5 );
+        $trash = 1;
+
+        return view( 'admin.products.index', compact( 'products', 'trash' ) );
+
+    }
+
+    public function recover( $id )
+    {
+
+        // $product = Product::withTrashed()->findOrFail( $id );
+        $product = Product::onlyTrashed()->findOrFail( $id );
+        if( $product->restore() ) {
+
+            return back()->with( 'message', 'Product Restored Successfully!' );
+
+        } else {
+
+            return back()->with( 'message', 'Error Restoring Product!' );
+
+        }
+
+    }
+
+    public function destroyFromTrash( $id )
+    {
+        
+        $product = Product::onlyTrashed()->where( 'id', $id )->first();
+        if( $product->categories()->count() > 0 ) {
+
+            $product->categories()->detach(); 
+
+        }
+
+        if( $product->forceDelete() ) {
+
+            Storage::disk( 'public' )->delete( $product->thumbnail );
+
+            return back()->with( 'message', "Product Deleted Successfully!" );
+
+        } else {
+
+            return back()->with( 'message', "Error Deleting Product!" );
+
+        }
+
     }
 }

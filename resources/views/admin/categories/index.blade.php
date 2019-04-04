@@ -86,18 +86,18 @@
 					<form method="POST" action="{{ route( 'admin.categories.destroyFromTrash', $category->id ) }}" id="delete-category-{{ $category->id }}" style="display: none;">
 						@csrf
 						@method( 'DELETE' )
-						<!-- <input type="hidden" name="category_id" value="{{ $category->id }}"> -->
+						<!-- <input type="hidden" name="category_id" value=""> -->
 					</form>
 				</td>
 				@else
 				<td>{{ $category->created_at->toDateString() }}</td>
 				<td>
-					<a href="{{ route( 'admin.categories.edit', $category->id ) }}" class="btn btn-info btn-sm">
+					<a href="{{ route( 'admin.categories.edit', $category->slug ) }}" class="btn btn-info btn-sm">
 						<span data-feather="edit"></span>
 						Edit
 					</a>
 					&nbsp;&nbsp;
-					<a href="{{ route( 'admin.categories.remove', $category->id ) }}" class="btn btn-warning btn-sm" id="trash-category-{{ $category->id }}">
+					<a href="{{ route( 'admin.categories.remove', $category->slug ) }}" class="btn btn-warning btn-sm" id="trash-category-{{ $category->id }}">
 						<span data-feather="trash"></span>
 						Trash
 					</a>
@@ -106,10 +106,10 @@
 						<span data-feather="trash-2"></span>
 						Delete
 					</a>
-					<form method="POST" action="{{ route( 'admin.categories.destroy', $category->id ) }}" id="delete-category-{{ $category->id }}" style="display: none;">
+					<form method="POST" action="{{ route( 'admin.categories.destroy', $category->slug ) }}" id="delete-category-{{ $category->id }}" style="display: none;">
 						@csrf
 						@method( 'DELETE' )
-						<!-- <input type="hidden" name="category_id" value="{{ $category->id }}"> -->
+						<!-- <input type="hidden" name="category_id" value=""> -->
 					</form>
 				</td>
 				@endif
@@ -117,7 +117,7 @@
 			@endforeach
 		@else
 		<tr>
-			<td colspan="8" style="text-align: center;">No category found!</td>
+			<td colspan="8" style="text-align: center;" class="alert alert-info">No category found!</td>
 		</tr>
 		@endif
 		</tbody>

@@ -26,4 +26,11 @@ class Category extends Model
     	return $this->belongsToMany( Category::class, 'category_parent', 'category_id', 'parent_category_id' );	// pivot table for many-to-many relationship
 
     }
+
+    public function getRouteKeyName()
+    {
+
+        return "slug";
+        
+    }
 }

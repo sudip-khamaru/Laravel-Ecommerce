@@ -26,7 +26,7 @@ class ValidateProduct extends FormRequest
         return [
             
             'title'         =>  'required',
-            'slug'          =>  'required',
+            'slug'          =>  'required|unique:products',
             'description'   =>  'required',
             'price'         =>  'required|numeric',
             'status'        =>  'required|numeric',

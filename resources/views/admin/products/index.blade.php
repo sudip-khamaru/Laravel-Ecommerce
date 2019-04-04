@@ -45,7 +45,9 @@
 				<th>Title</th>
 				<th>Description</th>
 				<th>Slug</th>
-				<th>Products</th>
+				<th>Categories</th>
+				<th>Price</th>
+				<th>Thumbnail</th>
 				@if( isset( $trash ) )
 				<th>Date Deleted</th>
 				@else
@@ -63,14 +65,16 @@
 				<td>{!! $product->description !!}</td>
 				<td>{{ $product->slug }}</td>
 				<td>
-				@if( isset( $product->childrens ) && $product->childrens->count() > 0 )
-					@foreach( $product->childrens as $children )
-						{{ $children->title }},
+				@if( isset( $product->categories ) && $product->categories->count() > 0 )
+					@foreach( $product->categories as $category )
+						{{ $category->title }},
 					@endforeach
 				@else
 					{{ "----" }}
 				@endif
 				</td>
+				<td>${{ $product->price }}</td>
+				<td><img src="{{ asset( 'storage/' . $product->thumbnail ) }}" alt="{{ $product->title }}" class="img-responsive" height="50"></td>
 				@if( $product->trashed() )
 				<td>{{ $product->deleted_at->toDateString() }}</td>
 				<td>
@@ -86,18 +90,18 @@
 					<form method="POST" action="{{ route( 'admin.products.destroyFromTrash', $product->id ) }}" id="delete-product-{{ $product->id }}" style="display: none;">
 						@csrf
 						@method( 'DELETE' )
-						<!-- <input type="hidden" name="product_id" value="{{ $product->id }}"> -->
+						<!-- <input type="hidden" name="product_id" value=""> -->
 					</form>
 				</td>
 				@else
 				<td>{{ $product->created_at->toDateString() }}</td>
 				<td>
-					<a href="{{ route( 'admin.products.edit', $product->id ) }}" class="btn btn-info btn-sm">
+					<a href="{{ route( 'admin.products.edit', $product->slug ) }}" class="btn btn-info btn-sm">
 						<span data-feather="edit"></span>
 						Edit
 					</a>
 					&nbsp;&nbsp;
-					<a href="{{ route( 'admin.products.remove', $product->id ) }}" class="btn btn-warning btn-sm" id="trash-product-{{ $product->id }}">
+					<a href="{{ route( 'admin.products.remove', $product->slug ) }}" class="btn btn-warning btn-sm" id="trash-product-{{ $product->id }}">
 						<span data-feather="trash"></span>
 						Trash
 					</a>
@@ -106,10 +110,10 @@
 						<span data-feather="trash-2"></span>
 						Delete
 					</a>
-					<form method="POST" action="{{ route( 'admin.products.destroy', $product->id ) }}" id="delete-product-{{ $product->id }}" style="display: none;">
+					<form method="POST" action="{{ route( 'admin.products.destroy', $product->slug ) }}" id="delete-product-{{ $product->id }}" style="display: none;">
 						@csrf
 						@method( 'DELETE' )
-						<!-- <input type="hidden" name="product_id" value="{{ $product->id }}"> -->
+						<!-- <input type="hidden" name="product_id" value=""> -->
 					</form>
 				</td>
 				@endif
@@ -117,7 +121,7 @@
 			@endforeach
 		@else
 		<tr>
-			<td colspan="8" style="text-align: center;">No product found!</td>
+			<td colspan="9" style="text-align: center;" class="alert alert-info">No product found!</td>
 		</tr>
 		@endif
 		</tbody>

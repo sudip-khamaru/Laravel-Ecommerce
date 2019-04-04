@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Category;
+use App\CategoryParent;
 use Illuminate\Http\Request;
 
 class CategoriesController extends Controller
@@ -64,7 +65,7 @@ class CategoriesController extends Controller
 
         } else {
 
-            return back()->with( 'message', "Error Adding Category" );
+            return back()->with( 'message', "Error Adding Category!" );
 
         } 
 
@@ -109,23 +110,25 @@ class CategoriesController extends Controller
     public function update(Request $request, Category $category)
     {
         
-        $request->validate( [
-
-            'title' =>  'required|min:5',
-            'slug'  =>  'required|min:5|unique:categories',
-
-        ] );
-        
         $category->title = $request->title;
         $category->description = $request->description;
         $category->slug = $request->slug;
 
         $category->childrens()->detach();
-        $category->childrens()->attach( $request->parent_category_id, [ 'created_at' => now(), 'updated_at' => now() ] );
 
-        $category->save();
+        if( $category->save() ) {
 
-        return back()->with( 'message', "Category Updated Successfully!" );
+            // store parent in category_parent table
+            $category->childrens()->attach( $request->parent_category_id, [ 'created_at' => now(), 'updated_at' => now() ] );
+
+            // redirect
+            return back()->with( 'message', "Category Updated Successfully!" );
+
+        } else {
+
+            return back()->with( 'message', "Error Updating Category!" );
+
+        } 
 
     }
 
@@ -138,28 +141,6 @@ class CategoriesController extends Controller
     public function destroy(Category $category)
     {
         
-        if( $category->childrens()->count() > 0 ) {
-
-            $category->childrens()->detach(); 
-
-        }
-
-        if( $category->forceDelete() ) {
-
-            return back()->with( 'message', "Category Deleted Successfully!" );
-
-        } else {
-
-            return back()->with( 'message', "Error Deleting Category!" );
-
-        }
-
-    }
-
-    public function destroyFromTrash( $id )
-    {
-        
-        $category = Category::onlyTrashed()->where( 'id', $id )->first();
         if( $category->childrens()->count() > 0 ) {
 
             $category->childrens()->detach(); 
@@ -214,7 +195,29 @@ class CategoriesController extends Controller
 
         } else {
 
-            return back()->with( 'message', 'Error Restoring Category' );
+            return back()->with( 'message', 'Error Restoring Category!' );
+
+        }
+
+    }
+
+    public function destroyFromTrash( $id )
+    {
+        
+        $category = Category::onlyTrashed()->where( 'id', $id )->first();
+        if( $category->childrens()->count() > 0 ) {
+
+            $category->childrens()->detach(); 
+
+        }
+
+        if( $category->forceDelete() ) {
+
+            return back()->with( 'message', "Category Deleted Successfully!" );
+
+        } else {
+
+            return back()->with( 'message', "Error Deleting Category!" );
 
         }
 

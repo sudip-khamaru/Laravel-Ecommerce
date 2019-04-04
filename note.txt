@@ -1,0 +1,6 @@
+1. composer install
+2. php artisn key:generate
+3. npm install
+4. php artisan migrate
+5. php artisan db:seed 
+6. php artisan storage:link

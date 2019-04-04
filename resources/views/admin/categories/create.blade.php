@@ -20,7 +20,7 @@
 		Add Category
 	@endif
 </h2>
-<form method="POST" action="@if( isset( $select_category ) && $select_category->count() > 0 ) {{ route( 'admin.categories.update', $select_category->id ) }} @else {{ route( 'admin.categories.store' ) }} @endif" accept-charset="UTF-8">
+<form method="POST" action="@if( isset( $select_category ) && $select_category->count() > 0 ) {{ route( 'admin.categories.update', $select_category->slug ) }} @else {{ route( 'admin.categories.store' ) }} @endif" accept-charset="UTF-8">
 	@csrf
 	@if( isset( $select_category ) && $select_category->count() > 0 )
 		@method( 'PUT' )
