@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Profile;
 use App\Role;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -37,5 +38,35 @@ class User extends Authenticatable
         
         return $this->belongsTo( Role::class );
 
+    }
+
+    public function profile() {
+
+        return $this->hasOne( Profile::class );
+        
+    }
+
+    public function getUserCountry() {
+
+        return $this->profile->country->name;
+    
+    }
+
+    // public function getUserState() {
+
+    //     return $this->profile->state->name;
+    
+    // }
+
+    // public function getUserCity() {
+
+    //     return $this->profile->city->name;
+    
+    // }
+
+    public function getRouteKeyName() {
+    
+        return "slug";
+    
     }
 }

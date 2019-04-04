@@ -51,7 +51,7 @@
 				<div class="col-sm-12">
 					<label for="txturl" class="form-control-label">Title:</label>
 					<input type="text" id="txturl" name="title" class="form-control" value="{{ @$product->title }}">
-					<p class="small">{{ config( 'app.url' ) }}/<span id="url">{{ @$product->slug }}</span>
+					<p class="small">{{ route( 'admin.products.index' ) }}/<span id="url">{{ @$product->slug }}</span>
 						<input type="hidden" name="slug" id="slug" value="{{ @$product->slug }}">
 					</p>
 				</div>
@@ -217,7 +217,7 @@ $( function() {
 		var file = $( this ).get( 0 ).files;
 		var reader = new FileReader();
 		reader.readAsDataURL( file[ 0 ] );
-		reader.addEventListener( "load", function( e ) {
+		reader.addEventListener( 'load', function( e ) {
 
 			var image = e.target.result;
 			$( '#imgthumbnail' ).attr( 'src', image );
@@ -228,30 +228,20 @@ $( function() {
 
 	$( '#btn-add' ).on( 'click', function( e ) {
 
+		e.preventDefault();
+
 		var count = $( '.options' ).length + 1;
-		$( '#extras' ).append( 
+		$.get( "{{ route( 'admin.products.extras' ) }}", { count: count } ).done( function( data ) {
 
-			'<div class="row align-items-center options">\
-				<div class="col-sm-12">\
-					<h5 class="pt-2 pb-2 bg-primary text-center" style="color:#fff;">Extras</h5>\
-				</div>\
-				<div class="col-sm-4">\
-					<label class="form-control-label" for="option-' + count + '">Option' + count + '</label>\
-					<input type="text" name="option[]" class="form-control" id="option-' + count + '" value="" placeholder="size">\
-				</div>\
-				<div class="col-sm-8">\
-					<label class="form-control-label" for="values-' + count + '">Values</label>\
-					<input type="text" name="values[]" class="form-control" id="values-' + count + '" placeholder="options1 | option2 | option3" />\
-					<label class="form-control-label" for="additional-price-' + count + '">Additional Prices</label>\
-					<input type="text" name="prices[]" class="form-control" id="additional-price-' + count + '" placeholder="price1 | price2 | price3" />\
-				</div>\
-			</div>' 
+			$( '#extras' ).append( data );
 
-		);
+		} );
 
 	} );
 	
 	$( '#btn-remove' ).on( 'click', function( e ) {
+
+		e.preventDefault();
 
 		$( '.options:last' ).remove();
 	

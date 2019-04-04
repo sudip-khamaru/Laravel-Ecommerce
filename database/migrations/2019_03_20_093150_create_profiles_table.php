@@ -17,9 +17,9 @@ class CreateProfilesTable extends Migration
             $table->increments('id');
             $table->unsignedInteger( 'user_id' );
             $table->string( 'name' )->nullable();
+            $table->string( 'slug' )->nullable();
             $table->text( 'address' )->nullable();
             $table->string( 'phone' )->nullable();
-            $table->string( 'slug' )->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

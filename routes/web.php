@@ -33,6 +33,7 @@ Route::group( [ 'as' => 'admin.', 'middleware' => [ 'auth', 'admin' ], 'prefix' 
 	Route::get( '/products/trash', 'ProductsController@trash' )->name( 'products.trash' );
 	Route::get( '/products/recover/{id?}', 'ProductsController@recover' )->name( 'products.recover' );
 	Route::delete( '/products/destroyFromTrash/{id?}', 'ProductsController@destroyFromTrash' )->name( 'products.destroyFromTrash' );
+	Route::view( '/products/extras', 'admin.partials.extras' )->name( 'products.extras' );
 	Route::resource( '/products', 'ProductsController' );
 
 	/**
@@ -43,5 +44,17 @@ Route::group( [ 'as' => 'admin.', 'middleware' => [ 'auth', 'admin' ], 'prefix' 
 	Route::get( '/categories/recover/{id?}', 'CategoriesController@recover' )->name( 'categories.recover' );
 	Route::delete( '/categories/destroyFromTrash/{id?}', 'CategoriesController@destroyFromTrash' )->name( 'categories.destroyFromTrash' );
 	Route::resource( '/categories', 'CategoriesController' );
+
+	/**
+	 * Profiles Controller
+	 */
+	Route::get( '/profiles/states/{id?}', 'ProfilesController@getStates' )->name( 'profiles.states' );
+	Route::get( '/profiles/cities/{id?}', 'ProfilesController@getCities' )->name( 'profiles.cities' );
+	Route::get( '/profiles/{profile}/remove', 'ProfilesController@remove' )->name( 'profiles.remove' );
+	Route::get( '/profiles/trash', 'ProfilesController@trash' )->name( 'profiles.trash' );
+	Route::get( '/profiles/recover/{id?}', 'ProfilesController@recover' )->name( 'profiles.recover' );
+	Route::delete( '/profiles/destroyFromTrash/{id?}', 'ProfilesController@destroyFromTrash' )->name( 'profiles.destroyFromTrash' );
+	Route::view( '/profiles/extras', 'admin.partials.extras' )->name( 'profiles.extras' ); 
+	Route::resource( '/profiles', 'ProfilesController' );
 
 } );

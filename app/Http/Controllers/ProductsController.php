@@ -71,6 +71,7 @@ class ProductsController extends Controller
             'discount_price'    =>  ( $request->discount_price ) ? $request->discount_price : 0,
             'discount'          =>  ( $request->discount ) ? $request->discount : 0,
             'featured'          =>  ( $request->featured ) ? $request->featured : 0,
+            'options'           =>  isset( $request->extras ) ? json_encode( $request->extras ) : NULL,
             'status'            =>  $request->status,
             'thumbnail'         =>  $path,
 

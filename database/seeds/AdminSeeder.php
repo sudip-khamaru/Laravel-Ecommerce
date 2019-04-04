@@ -17,13 +17,14 @@ class AdminSeeder extends Seeder
 
         	'email'		=>	"admin@brandsoftinfotech.com",
         	'password'	=>	bcrypt( 'root123' ),
-        	'role_id'	=>	1,
+            'role_id'   =>  1,
 
         ] );
 
         $profile = Profile::create( [
 
-        	'user_id'	=>	$user->id,
+            'user_id'   =>  $user->id,
+        	'slug'	    =>	1,
        
         ] );
     }

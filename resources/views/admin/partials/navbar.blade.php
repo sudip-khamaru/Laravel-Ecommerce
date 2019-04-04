@@ -55,18 +55,26 @@
               </a>
             </div>
           </li>
-          <!-- <li class="nav-item @if( url( '/admin' ) == route( 'admin.dashboard' ) ) {{ 'active' }} @endif">
-            <a class="nav-link" href="#">
-              <span data-feather="users"></span>
-              Customers
+          <li class="nav-item dropdown">
+            <a id="customer-dropdown" class="nav-link @if( request()->url() == route( 'admin.profiles.index' ) ) {{ 'active' }} @else {{ '' }} @endif dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <span data-feather="user"></span>
+              Customer
             </a>
+            <div class="dropdown-menu" aria-labelledby="customerDropdown">
+              <a class="dropdown-item" href="{{ route( 'admin.profiles.index' ) }}">
+                <span data-feather="list"></span>
+                All Customer
+              </a>
+              <a class="dropdown-item" href="{{ route( 'admin.profiles.create' ) }}">
+                <span data-feather="plus"></span>
+                Add Customer
+              </a>
+              <a class="dropdown-item" href="{{ route( 'admin.profiles.trash' ) }}">
+                <span data-feather="trash"></span>
+                Trashed Customer
+              </a>
+            </div>
           </li>
-          <li class="nav-item @if( url( '/admin' ) == route( 'admin.dashboard' ) ) {{ 'active' }} @endif">
-            <a class="nav-link" href="#">
-              <span data-feather="layers"></span>
-              Integrations
-            </a>
-          </li> -->
         </ul>
 
       <!--   <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">

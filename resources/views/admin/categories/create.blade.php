@@ -51,8 +51,9 @@
 		<div class="col-sm-12">
 			<label for="txturl" class="form-control-label">Title:</label>
 			<input type="text" id="txturl" name="title" class="form-control" value="{{ @$select_category->title }}">
-			<p class="small">{{ config( 'app.url' ) }}/<span id="url">{{ @$select_category->slug }}</span></p>
-			<input type="hidden" name="slug" id="slug" value="{{ @$select_category->slug }}">
+			<p class="small">{{ route( 'admin.categories.index' ) }}/<span id="url">{{ @$select_category->slug }}</span>
+				<input type="hidden" name="slug" id="slug" value="{{ @$select_category->slug }}">
+			</p>
 		</div>
 	</div>
 
