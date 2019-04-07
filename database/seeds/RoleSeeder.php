@@ -14,14 +14,14 @@ class RoleSeeder extends Seeder
     {
         $role = Role::create( [
 
-        	'name'			=>	"admin",
+        	'name'			=>	"Admin",
         	'description'	=>	"Admin Role",
 
         ] );
 
         $role = Role::create( [
 
-        	'name'			=>	"customer",
+        	'name'			=>	"Customer",
         	'description'	=>	"Customer Role",
 
         ] );

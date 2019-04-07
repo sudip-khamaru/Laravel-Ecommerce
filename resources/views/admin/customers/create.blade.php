@@ -20,7 +20,7 @@
 		Add Customer
 	@endif
 </h2>
-<form method="POST" action="@if( isset( $customer ) && $customer->count() > 0 ) {{ route( 'admin.profiles.update', $customer->profile->slug ) }} @else {{ route( 'admin.profiles.store' ) }} @endif" accept-charset="UTF-8" enctype="multipart/form-data">
+<form method="POST" action="@if( isset( $customer ) && $customer->count() > 0 ) {{ route( 'admin.profiles.update', $customer->slug ) }} @else {{ route( 'admin.profiles.store' ) }} @endif" accept-charset="UTF-8" enctype="multipart/form-data">
 	@csrf
 	@if( isset( $customer ) && $customer->count() > 0 )
 		@method( 'PUT' )
@@ -47,29 +47,29 @@
 					</div>
 					@endif
 				</div>	
-			
+
 				<div class="col-sm-12 col-md-6">
 					<label class="form-control-label">Name: </label>
-					<input type="text" id="txturl" name="name" class="form-control" value="{{ @$customer->profile->name }}">
-					<p class="small">{{ route( 'admin.profiles.index' ) }}/<span id="url">{{ @$customer->profile->slug }}</span>
-						<input type="hidden" name="slug" id="slug" value="{{ @$customer->profile->slug }}">
+					<input type="text" id="txturl" name="name" class="form-control" value="{{ @$customer->name }}">
+					<p class="small">{{ route( 'admin.profiles.index' ) }}/<span id="url">{{ @$customer->slug }}</span>
+						<input type="hidden" name="slug" id="slug" value="{{ @$customer->slug }}">
 					</p>
 				</div>
 
 				<div class="col-sm-12 col-md-6">
 					<label class="form-control-label">Email: </label>
-					<input type="text" id="email" name="email" class="form-control" value="{{ @$customer->email }}">
+					<input type="text" id="email" name="email" class="form-control" value="{{ @$customer->user->email }}" @if( !empty( $customer->user->email ) ) {{ "disabled" }} @endif>
 				</div>
 			</div>
 
 			<div class="form-group row">
 				<div class="col-sm-12 col-md-6">
 					<label class="form-control-label">Password: </label>
-					<input type="password" id="password" name="password" class="form-control" value="{{ @$customer->profile->name }}">
+					<input type="password" id="password" name="password" class="form-control" value="{{ @$customer->user->password }}">
 				</div>
 				<div class="col-sm-12 col-md-6">
 					<label class="form-control-label">Confirm Password: </label>
-					<input type="password" id="password_confirm" name="password_confirm" class="form-control " value="">
+					<input type="password" id="password_confirm" name="password_confirm" class="form-control" value="">
 				</div>
 			</div>
 
@@ -78,26 +78,20 @@
 					<label class="form-control-label">Status: </label>
 					<div class="input-group mb-3">
 						<select class="form-control" id="status" name="status">
-							<option value="0" @if( isset( $customer ) && $customer->status == 0 ) {{ "selected" }} @endif >Blocked</option>
-							<option value="1" @if( isset( $customer ) && $customer->status == 1 ) {{ "selected" }} @endif>Active</option>
+							<option value="0" @if( isset( $customer ) && $customer->user->status == 0 ) {{ "selected" }} @endif >Blocked</option>
+							<option value="1" @if( isset( $customer ) && $customer->user->status == 1 ) {{ "selected" }} @endif>Active</option>
 						</select>
 					</div>
 				</div>
-				@php
-					$selected_ids = ( isset( $customer->role ) && $customer->role->count() > 0 ) ? array_pluck( $customer->role->toArray(), 'id' ) : null;
-				@endphp
-				{{-- <div class="col-sm-6">
-					<label class="form-control-label">Select Role: </label>
+
+				@if( isset( $customer->user->role->name ) && !empty( $customer->user->role->name ) )
+				<div class="col-sm-6">
+					<label class="form-control-label">Role: </label>
 					<div class="input-group mb-3">
-						<select name="role_id" id="role" class="form-control">
-						@if( $roles->count() > 0 )
-							@foreach( $roles as $role )
-								<option value="{{ $role->id }}"	@if( !is_null( $selected_ids ) && in_array( $role->id, $selected_ids ) ) {{ "selected" }} @endif>{{ $role->name }}</option>
-							@endforeach
-						@endif
-						</select>
+						<input type="text" name="customer_role" class="form-control" value="{{ $customer->user->role->name }}" disabled="disabled">
 					</div>
-				</div> --}}
+				</div>
+				@endif
 			</div>
 
 			{{-- <div class="row">
@@ -108,7 +102,7 @@
 				<div class="col-sm-12">
 					<label class="form-control-label">Address: </label>
 					<div class="input-group mb-3">
-						<textarea type="text" name="address" class="form-control" rows="3" cols="4">{{ @$customer->addrress }}</textarea>
+						<textarea type="text" name="address" class="form-control" rows="3" cols="4">{{ @$customer->address }}</textarea>
 					</div>
 				</div>
 			</div>
@@ -118,10 +112,10 @@
 					<label class="form-control-label">Country: </label>
 					<div class="input-group mb-3">
 						<select name="country_id" class="form-control" id="countries">
-						@if( $countries->count() > 0 )
+						@if( isset( $countries ) && $countries->count() > 0 )
 							<option value="0">Select a country</option>
 							@foreach( $countries as $country )
-								<option value="{{ $country->id }}">{{ $country->name }}</option>
+								<option value="{{ $country->id }}" @if( isset( $customer ) && $country->id == $customer->country_id ) {{ "selected" }} @endif >{{ $country->name }}</option>
 							@endforeach
 						@endif
 						</select>
@@ -133,6 +127,11 @@
 					<div class="input-group mb-3">
 						<select name="state_id" class="form-control" id="states">
 							<option value="0">Select a state</option>
+							@if( isset( $customer ) && $customer->count() > 0 )
+								@foreach( $states as $state )
+									<option value="{{ $state->id }}" @if( $state->id == $customer->state_id ) {{ "selected" }} @endif >{{ $state->name }}</option>
+								@endforeach
+							@endif
 						</select>
 					</div>
 				</div>
@@ -142,12 +141,17 @@
 					<div class="input-group mb-3">
 						<select name="city_id" class="form-control" id="cities">
 							<option value="0">Select a city</option>
+							@if( isset( $customer ) && $customer->count() > 0 )
+								@foreach( $cities as $city )
+									<option value="{{ $city->id }}" @if( $city->id == $customer->city_id ) {{ "selected" }} @endif >{{ $city->name }}</option>
+								@endforeach
+							@endif
 						</select>
 					</div>
 				</div>
 
 				<div class="col-sm-6 col-md-3">
-					<label class="form-control-label">Phone: </label>
+					<label class="form-control-label">Contact: </label>
 					<div class="input-group mb-3">
 						<input type="text" class="form-control" name="phone" placeholder="Phone" value="{{ @$customer->phone }}" />
 					</div>
@@ -177,7 +181,7 @@
 						</div>
 					</div>
 					<div class="img-thumbnail text-center">
-						<img src="@if( isset( $customer )) {{ asset( 'storage/' . $customer->thumbnail ) }} @else {{ asset( 'images/no-thumbnail.jpeg' ) }} @endif" id="imgthumbnail" class="img-fluid" alt="">
+						<img src="@if( isset( $customer )) {{ asset( 'storage/' . $customer->thumbnail ) }} @else {{ asset( 'images/no-thumbnail.jpeg' ) }} @endif" alt="@if( isset( $customer )) {{ $customer->name }} @else {{ 'No image' }} @endif" id="imgthumbnail" class="img-fluid">
 					</div>
 				</li>
 			</ul>
@@ -189,6 +193,8 @@
 @section( 'scripts' )
 <script type="text/javascript">
 $( function() {
+
+	$( 'form' ).attr( 'autocomplete', 'off' );
 
 	ClassicEditor.create( document.querySelector( '#editor' ), {
 

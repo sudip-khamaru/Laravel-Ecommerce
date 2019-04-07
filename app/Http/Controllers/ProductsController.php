@@ -145,7 +145,6 @@ class ProductsController extends Controller
         }
 
         $product->title = $request->title;
-        // $product->slug = $request->slug;
         $product->description = $request->description;
         $product->price = $request->price;
         $product->discount_price = ( $request->discount_price ) ? $request->discount_price : 0;

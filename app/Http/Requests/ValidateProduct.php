@@ -26,7 +26,7 @@ class ValidateProduct extends FormRequest
         return [
             
             'title'         =>  'required',
-            'slug'          =>  'required|unique:products',
+            'slug'          =>  'required|unique:products,slug,' . $this->slug . ',slug',
             'description'   =>  'required',
             'price'         =>  'required|numeric',
             'status'        =>  'required|numeric',

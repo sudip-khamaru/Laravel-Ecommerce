@@ -54,7 +54,6 @@ Route::group( [ 'as' => 'admin.', 'middleware' => [ 'auth', 'admin' ], 'prefix' 
 	Route::get( '/profiles/trash', 'ProfilesController@trash' )->name( 'profiles.trash' );
 	Route::get( '/profiles/recover/{id?}', 'ProfilesController@recover' )->name( 'profiles.recover' );
 	Route::delete( '/profiles/destroyFromTrash/{id?}', 'ProfilesController@destroyFromTrash' )->name( 'profiles.destroyFromTrash' );
-	Route::view( '/profiles/extras', 'admin.partials.extras' )->name( 'profiles.extras' ); 
 	Route::resource( '/profiles', 'ProfilesController' );
 
 } );

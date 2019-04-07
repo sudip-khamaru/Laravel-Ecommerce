@@ -3,6 +3,7 @@
 use App\Profile;
 use App\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class AdminSeeder extends Seeder
 {
@@ -16,7 +17,7 @@ class AdminSeeder extends Seeder
         $user = User::create( [
 
         	'email'		=>	"admin@brandsoftinfotech.com",
-        	'password'	=>	bcrypt( 'root123' ),
+        	'password'	=>	Hash::make( "root123" ),
             'role_id'   =>  1,
 
         ] );
@@ -24,7 +25,9 @@ class AdminSeeder extends Seeder
         $profile = Profile::create( [
 
             'user_id'   =>  $user->id,
-        	'slug'	    =>	1,
+            'name'      =>  "Admin",
+        	'slug'	    =>	"admin",
+            'thumbnail' =>  "images/no-thumbnail.jpeg",
        
         ] );
     }

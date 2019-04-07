@@ -10,6 +10,9 @@ use App\Role;
 use App\State;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class ProfilesController extends Controller
 {
@@ -21,7 +24,7 @@ class ProfilesController extends Controller
     public function index()
     {
         
-        $customers = User::with( 'role', 'profile' )->paginate( 5 );
+        $customers = Profile::with( 'user', 'user.role' )->paginate( 5 );
 
         return view( 'admin.customers.index', compact( 'customers' ) );
 
@@ -35,9 +38,8 @@ class ProfilesController extends Controller
     public function create()
     {
         
-        $roles = Role::all();
         $countries = Country::all();
-        return view( 'admin.customers.create', compact( 'roles', 'countries' ) );
+        return view( 'admin.customers.create', compact( 'countries' ) );
 
     }
 
@@ -53,7 +55,7 @@ class ProfilesController extends Controller
         $user = User::create( [
 
             'email'     =>  $request->email,
-            'password'  =>  bcrypt( $request->password ),
+            'password'  =>  Hash::make( $request->password ),
             'status'    =>  $request->status,
 
         ] );
@@ -121,10 +123,13 @@ class ProfilesController extends Controller
     public function edit(Profile $profile)
     {
         
-        $customer = User::find( $profile )->first();
+        $customer = Profile::with( 'user', 'user.role' )->findOrFail( $profile->id );
         $roles = Role::all();
         $countries = Country::all();
-        return view( 'admin.customers.create', compact( 'customer', 'roles', 'countries' ) );
+        $states = State::where( 'country_id', $profile->country_id )->get();
+        $cities = City::where( 'state_id', $profile->state_id )->get();
+
+        return view( 'admin.customers.create', compact( 'customer', 'roles', 'countries', 'states', 'cities' ) );
 
     }
 
@@ -137,7 +142,58 @@ class ProfilesController extends Controller
      */
     public function update(Request $request, Profile $profile)
     {
-        //
+        
+        $user = User::where( 'id', $profile->user_id )->first();
+
+        if( $request->password !== $user->password ) {
+
+            // validate inputs
+            $request->validate( [
+
+                'password'          =>  'same:password_confirm',
+                'password_confirm'  =>  'required',
+
+            ] );
+
+            $user->password = Hash::make( $request->password );
+
+        } 
+
+        $user->status = $request->status;
+        $user->save();
+
+        if( $request->has( 'thumbnail' ) ) {
+
+            Storage::disk( 'public' )->delete( $profile->thumbnail );
+
+            $extension = "." . $request->thumbnail->getClientOriginalExtension();
+            $name = basename( $request->thumbnail->getClientOriginalName(), $extension ) . time();
+            $thumbnail = $name . $extension;
+            // $path = $request->thumbnail->store( 'images' );
+            $path = $request->thumbnail->storeAs( 'images/profiles', $thumbnail, 'public' );
+
+            $profile->thumbnail = $path;
+
+        }
+
+        $profile->name = $request->name;
+        $profile->address = $request->address;
+        $profile->country_id = $request->country_id;
+        $profile->state_id = $request->state_id;
+        $profile->city_id = $request->city_id;
+        $profile->phone = $request->phone;
+
+        if( $profile->save() ) {
+
+            // redirect
+            return back()->with( 'message', "User Updated Successfully!" );
+
+        } else {
+
+            return back()->with( 'message', "Error Updating User!" );
+
+        } 
+
     }
 
     /**
@@ -148,7 +204,84 @@ class ProfilesController extends Controller
      */
     public function destroy(Profile $profile)
     {
-        //
+        
+        $profile->user()->forceDelete();
+
+        if( $profile->forceDelete() ) {
+
+            Storage::disk( 'public' )->delete( $profile->thumbnail );
+
+            return back()->with( 'message', "User Deleted Successfully!" );
+
+        } else {
+
+            return back()->with( 'message', "Error Deleting User!" );
+
+        }
+
+    }
+
+    public function remove( Profile $profile )
+    {
+        
+        if( $profile->delete() ) {
+
+            return back()->with( 'message', "User Trashed Successfully!" );
+
+        } else {
+
+            return back()->with( 'message', "Error Trashing User!" );
+
+        }
+
+    }
+
+    public function trash()
+    {
+        
+        $customers = Profile::with( 'user', 'user.role' )->onlyTrashed()->paginate( 5 );
+        // dd( $customers );
+        $trash = 1;
+
+        return view( 'admin.customers.index', compact( 'customers', 'trash' ) );
+
+    }
+
+    public function recover( $id )
+    {
+
+        // $profile = Profile::withTrashed()->findOrFail( $id );
+        $profile = Profile::onlyTrashed()->findOrFail( $id );
+        if( $profile->restore() ) {
+
+            return back()->with( 'message', 'User Restored Successfully!' );
+
+        } else {
+
+            return back()->with( 'message', 'Error Restoring User!' );
+
+        }
+
+    }
+
+    public function destroyFromTrash( $id )
+    {
+        
+        $profile = Profile::onlyTrashed()->where( 'id', $id )->first();
+        $profile->user()->forceDelete();
+
+        if( $profile->forceDelete() ) {
+
+            Storage::disk( 'public' )->delete( $profile->thumbnail );
+
+            return back()->with( 'message', "User Deleted Successfully!" );
+
+        } else {
+
+            return back()->with( 'message', "Error Deleting User!" );
+
+        }
+
     }
 
     public function getStates( Request $request, $id )

@@ -145,12 +145,12 @@
 					</div>
 				</li>
 				@php
-					$selected_ids = ( isset( $product ) && $product->categories->count() > 0 ) ? array_pluck( $product->categories->toArray(), 'id' ) : null;
+					$selected_ids = ( isset( $product ) && $product->categories->count() > 0 ) ? array_pluck( $product->categories->toArray(), 'id' ) : null;					
 				@endphp
 				<li class="list-group-item active"><h5><label for="select2">Select Categories</label></h5></li>
 				<li class="list-group-item ">
 					<select name="category_id[]" id="select2" class="form-control" multiple>
-					@if( $categories->count() > 0 )
+					@if( isset( $categories ) && $categories->count() > 0 )
 						@foreach( $categories as $category )
 							<option value="{{ $category->id }}" @if( !is_null( $selected_ids ) && in_array( $category->id, $selected_ids ) ) {{ "selected" }} @endif >{{ $category->title }}</option>
 						@endforeach
