@@ -16,26 +16,6 @@
             </a>
           </li> -->
           <li class="nav-item dropdown">
-            <a id="product-dropdown" class="nav-link @if( request()->url() == route( 'admin.products.index' ) ) {{ 'active' }} @endif  dropdown-toggle" href="javascript:;" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <span data-feather="shopping-cart"></span>
-              Products
-            </a>
-            <div class="dropdown-menu" aria-labelledby="productDropdown">
-              <a class="dropdown-item" href="{{ route( 'admin.products.index' ) }}">
-                <span data-feather="list"></span>
-                All Products
-              </a>
-              <a class="dropdown-item" href="{{ route( 'admin.products.create' ) }}">
-                <span data-feather="plus"></span>
-                Add Product
-              </a>
-              <a class="dropdown-item" href="{{ route( 'admin.products.trash' ) }}">
-                <span data-feather="trash"></span>
-                Trashed Products
-              </a>
-            </div>
-          </li>
-          <li class="nav-item dropdown">
             <a id="category-dropdown" class="nav-link @if( request()->url() == route( 'admin.categories.index' ) ) {{ 'active' }} @else {{ '' }} @endif dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <span data-feather="grid"></span>
               Categories
@@ -55,6 +35,28 @@
               </a>
             </div>
           </li>
+          
+          <li class="nav-item dropdown">
+            <a id="product-dropdown" class="nav-link @if( request()->url() == route( 'admin.products.index' ) ) {{ 'active' }} @endif  dropdown-toggle" href="javascript:;" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <span data-feather="shopping-cart"></span>
+              Products
+            </a>
+            <div class="dropdown-menu" aria-labelledby="productDropdown">
+              <a class="dropdown-item" href="{{ route( 'admin.products.index' ) }}">
+                <span data-feather="list"></span>
+                All Products
+              </a>
+              <a class="dropdown-item" href="{{ route( 'admin.products.create' ) }}">
+                <span data-feather="plus"></span>
+                Add Product
+              </a>
+              <a class="dropdown-item" href="{{ route( 'admin.products.trash' ) }}">
+                <span data-feather="trash"></span>
+                Trashed Products
+              </a>
+            </div>
+          </li>
+          
           <li class="nav-item dropdown">
             <a id="customer-dropdown" class="nav-link @if( request()->url() == route( 'admin.profiles.index' ) ) {{ 'active' }} @else {{ '' }} @endif dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <span data-feather="user"></span>

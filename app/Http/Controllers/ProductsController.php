@@ -264,4 +264,14 @@ class ProductsController extends Controller
         }
 
     }
+
+    public function showAllProduct()
+    {
+
+        $categories = Category::all();
+        $products = Product::all();
+
+        return view( 'products.show-all', compact( 'categories', 'products' ) );
+    
+    }
 }

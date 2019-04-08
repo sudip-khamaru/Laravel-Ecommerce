@@ -1,2 +1,1 @@
 1. When admin create a new customer default status of customer takes 1 as default when storing.
-2. 

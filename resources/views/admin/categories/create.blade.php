@@ -111,13 +111,21 @@ $( function() {
 
 	} );
 
-	$( '#txturl' ).on( 'keyup', function() {
+	@php
+	if( !isset( $select_category ) ) {
+	@endphp
 
-		var getText = slugify( $( this ).val() );
-		$( '#url' ).html( getText );
-		$( '#slug' ).val( getText );
+		$( '#txturl' ).on( 'keyup', function() {
 
-	} );
+			var getText = slugify( $( this ).val() );
+			$( '#url' ).html( getText );
+			$( '#slug' ).val( getText );
+
+		} );
+
+	@php
+	}
+	@endphp
 
 	$( '#parent-category-id' ).select2( {
 

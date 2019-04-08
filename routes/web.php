@@ -57,3 +57,9 @@ Route::group( [ 'as' => 'admin.', 'middleware' => [ 'auth', 'admin' ], 'prefix' 
 	Route::resource( '/profiles', 'ProfilesController' );
 
 } );
+
+Route::group( [ 'as' => 'products.', 'prefix' => 'products' ], function() {
+
+	Route::get( '/', 'ProductsController@showAllProduct' )->name( 'show-all-product' );
+
+} );

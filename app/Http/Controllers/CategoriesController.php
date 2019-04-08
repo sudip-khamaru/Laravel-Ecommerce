@@ -112,7 +112,7 @@ class CategoriesController extends Controller
         
         $category->title = $request->title;
         $category->description = $request->description;
-        $category->slug = $request->slug;
+        // $category->slug = $request->slug;
 
         $category->childrens()->detach();
 
