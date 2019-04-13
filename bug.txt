@@ -1,1 +1,4 @@
 1. When admin create a new customer default status of customer takes 1 as default when storing.
+2. Create show page for category, product, profile in admin.
+3. Remove product when quantity is 0 in cart.
+4. Update cart details when increasing product quantity.

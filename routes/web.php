@@ -60,6 +60,16 @@ Route::group( [ 'as' => 'admin.', 'middleware' => [ 'auth', 'admin' ], 'prefix' 
 
 Route::group( [ 'as' => 'products.', 'prefix' => 'products' ], function() {
 
-	Route::get( '/', 'ProductsController@showAllProduct' )->name( 'show-all-product' );
+	Route::get( '/', 'ProductsController@showAllProduct' )->name( 'showAllProduct' );
+	Route::get( '/{product}', 'ProductsController@showSingleProduct' )->name( 'showSingleProduct' );
+	Route::get( '/add-to-cart/{product}', 'ProductsController@addToCart' )->name( 'addToCart' );
+
+} );
+
+Route::group( [ 'as' => 'cart.', 'prefix' => 'cart' ], function() {
+
+	Route::get( '/', 'ProductsController@viewCart' )->name( 'viewCart' );
+	Route::post( '/remove/{product}', 'ProductsController@removeSingleProductFromCart' )->name( 'removeSingleProductFromCart' );
+	Route::post( '/update/{product}', 'ProductsController@updateSingleProductInCart' )->name( 'updateSingleProductInCart' );
 
 } );

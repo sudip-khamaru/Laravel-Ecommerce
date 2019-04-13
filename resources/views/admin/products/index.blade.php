@@ -62,7 +62,7 @@
 			<tr>
 				<td>{{ $product->id }}</td>
 				<td>{{ $product->title }}</td>
-				<td>{!! $product->description !!}</td>
+				<td>@if( isset( $product->description ) ) {!! substr( $product->description, 0, 30 ) !!}[..] @endif</td>
 				<td>{{ $product->slug }}</td>
 				<td>
 				@if( isset( $product->categories ) && $product->categories->count() > 0 )

@@ -60,7 +60,7 @@
 			<tr>
 				<td>{{ $category->id }}</td>
 				<td>{{ $category->title }}</td>
-				<td>{!! $category->description !!}</td>
+				<td>@if( isset( $category->description ) ) {!! substr( $category->description, 0, 30 ) !!}[..] @endif</td>
 				<td>{{ $category->slug }}</td>
 				<td>
 				@if( isset( $category->childrens ) && $category->childrens->count() > 0 )
