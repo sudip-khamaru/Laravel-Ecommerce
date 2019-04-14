@@ -73,3 +73,9 @@ Route::group( [ 'as' => 'cart.', 'prefix' => 'cart' ], function() {
 	Route::post( '/update/{product}', 'ProductsController@updateSingleProductInCart' )->name( 'updateSingleProductInCart' );
 
 } );
+
+Route::group( [ 'as' => 'checkout.', 'prefix' => 'checkout' ], function() {
+
+	Route::resource( '/', 'OrdersController' );
+
+} );

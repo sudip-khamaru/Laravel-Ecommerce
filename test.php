@@ -1,3 +1,7 @@
+
+*************
+
+
 @extends( 'layouts.app' )
 
 @section( 'content' )
@@ -45,7 +49,7 @@
 					<form id="update-quantity">
 						@csrf
 						<input type="number" name="qty" id="qty" class="form-control text-center" min="0" max="99" value="{{ $data[ 'qty' ] }}">
-						<input type="hidden" name="product-slug" id="product-slug" value="{{ $slug }}">
+						<input type="hidden" name="product-slug" value="{{ $slug }}">
 						<input type="submit" name="update" value="Update" class="btn btn-block btn-success btn-round">
 					</form>
 				</td>
@@ -83,13 +87,56 @@
 <script type="text/javascript">
 $( function() {
 
+	$.ajaxSetup( {
+        
+        headers: { 
+        
+        	'X-CSRF-TOKEN': $( '[name="_token"]' ).attr( 'value' ) 
+
+        }
+
+    } );
+
 	$( '#qty' ).on( 'change', function( e ) {
 
 		e.preventDefault();
-	
-		var slug = $( '#product-slug' ).val();
-		console.log( slug );
-		
+		// console.log( $( this ).val() );
+
+		// $.post( url ).done( function( data ) {
+
+		// 	$( 'form#update-quantity' ).submit();
+
+		// } );
+
+		$.ajax({
+		    url: "{{ route( 'cart.updateSingleProductInCart' ) }}/" + slug,
+		    type: 'POST',
+		    success: function(response){
+		        $( 'form#update-quantity' ).submit();
+		    },
+		    error: function(response){
+		    }
+		});
+
+		var stateSelect = $( '#states' );
+		$.ajax( {
+		    type: 'GET',
+		    url: "{{ route( 'admin.profiles.states' ) }}/" + countryId
+		} ).then( function( data ) {
+
+		    // create the option and append to Select2
+		    for( i = 0; i < data.length; i++ ) {
+		    	
+				var item = data[ i ];
+		    	var option = new Option( item.name, item.id, true, true );
+		    	stateSelect.append( option );
+
+		    }
+
+		    stateSelect.trigger( 'change' );
+
+		} );
+
 	} );
 
 } )

@@ -340,8 +340,6 @@ class ProductsController extends Controller
     public function updateSingleProductInCart( Request $request, Product $product )
     {
 
-        dd( $request->all() );
-
         $old_cart = Session::has( 'cart' ) ? Session::get( 'cart' ) : null;
 
         $quantity = $request->qty;

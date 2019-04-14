@@ -2,3 +2,4 @@
 2. Create show page for category, product, profile in admin.
 3. Remove product when quantity is 0 in cart.
 4. Update cart details when increasing product quantity.
+5. Promo code functionality not added in checkout. 

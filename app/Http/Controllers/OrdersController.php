@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Order;
+use App\Http\Requests\ValidateOrder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class OrdersController extends Controller
 {
@@ -14,7 +16,17 @@ class OrdersController extends Controller
      */
     public function index()
     {
-        //
+        
+        if( Session::has( 'cart' ) ) {
+
+            $cart = Session::get( 'cart' );
+
+            return view( 'checkout.index', compact( 'cart' ) );
+
+        }
+
+        return view( 'checkout.index' );
+
     }
 
     /**
@@ -33,9 +45,11 @@ class OrdersController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ValidateOrder $request)
     {
-        //
+        
+        dd( $request->all() );
+
     }
 
     /**
