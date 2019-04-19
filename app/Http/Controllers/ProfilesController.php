@@ -93,11 +93,11 @@ class ProfilesController extends Controller
         if( $profile ) {
 
             // redirect
-            return redirect( route( 'admin.profiles.index' ) )->with( 'message', "User Created Successfully!" );
+            return redirect( route( 'admin.profiles.index' ) )->with( 'message', "User created successfully!" );
         
         } else {
 
-            return back()->with( 'message', "Error Creating User!" );
+            return back()->with( 'message', "Error creating user!" );
 
         } 
 
@@ -186,11 +186,11 @@ class ProfilesController extends Controller
         if( $profile->save() ) {
 
             // redirect
-            return back()->with( 'message', "User Updated Successfully!" );
+            return back()->with( 'message', "User updated successfully!" );
 
         } else {
 
-            return back()->with( 'message', "Error Updating User!" );
+            return back()->with( 'message', "Error updating user!" );
 
         } 
 
@@ -211,11 +211,11 @@ class ProfilesController extends Controller
 
             Storage::disk( 'public' )->delete( $profile->thumbnail );
 
-            return back()->with( 'message', "User Deleted Successfully!" );
+            return back()->with( 'message', "User deleted successfully!" );
 
         } else {
 
-            return back()->with( 'message', "Error Deleting User!" );
+            return back()->with( 'message', "Error deleting user!" );
 
         }
 
@@ -226,11 +226,11 @@ class ProfilesController extends Controller
         
         if( $profile->delete() ) {
 
-            return back()->with( 'message', "User Trashed Successfully!" );
+            return back()->with( 'message', "User trashed successfully!" );
 
         } else {
 
-            return back()->with( 'message', "Error Trashing User!" );
+            return back()->with( 'message', "Error trashing user!" );
 
         }
 
@@ -254,11 +254,11 @@ class ProfilesController extends Controller
         $profile = Profile::onlyTrashed()->findOrFail( $id );
         if( $profile->restore() ) {
 
-            return back()->with( 'message', 'User Restored Successfully!' );
+            return back()->with( 'message', 'User restored successfully!' );
 
         } else {
 
-            return back()->with( 'message', 'Error Restoring User!' );
+            return back()->with( 'message', 'Error restoring user!' );
 
         }
 
@@ -274,11 +274,11 @@ class ProfilesController extends Controller
 
             Storage::disk( 'public' )->delete( $profile->thumbnail );
 
-            return back()->with( 'message', "User Deleted Successfully!" );
+            return back()->with( 'message', "User deleted successfully!" );
 
         } else {
 
-            return back()->with( 'message', "Error Deleting User!" );
+            return back()->with( 'message', "Error deleting user!" );
 
         }
 

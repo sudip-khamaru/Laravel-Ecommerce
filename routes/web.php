@@ -79,3 +79,12 @@ Route::group( [ 'as' => 'checkout.', 'prefix' => 'checkout' ], function() {
 	Route::resource( '/', 'OrdersController' );
 
 } );
+
+Route::group( [ 'as' => 'payment.', 'prefix' => 'payment' ], function() {
+
+	Route::post( '/paypalPayment', 'OrdersController@paypalPaymentGateway' )->name( 'paypalPayment' );
+	Route::get( '/processPaypalPayment', 'OrdersController@processPaypalPayment' )->name( 'processPaypalPayment' );
+	Route::get( '/cancelPaypalPayment', 'OrdersController@cancelPaypalPayment' )->name( 'cancelPaypalPayment' );
+
+} );
+

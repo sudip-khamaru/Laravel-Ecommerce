@@ -311,15 +311,15 @@ class ProductsController extends Controller
     public function viewCart()
     {
 
-        if( Session::has( 'cart' ) ) {
+        if( !Session::has( 'cart' ) ) {
 
-            $cart = Session::get( 'cart' );
-
-            return view( 'cart.show', compact( 'cart' ) );
-
+            return view( 'cart.show' );
+            
         }
 
-        return view( 'cart.show' );
+        $cart = Session::get( 'cart' );
+
+        return view( 'cart.show', compact( 'cart' ) );
 
     }
 

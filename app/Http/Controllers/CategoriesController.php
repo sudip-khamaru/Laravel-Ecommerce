@@ -61,11 +61,11 @@ class CategoriesController extends Controller
             $category->childrens()->attach( $request->parent_category_id, [ 'created_at' => now(), 'updated_at' => now() ] );
 
             // redirect
-            return back()->with( 'message', "Category Added Successfully!" );
+            return back()->with( 'message', "Category added successfully!" );
 
         } else {
 
-            return back()->with( 'message', "Error Adding Category!" );
+            return back()->with( 'message', "Error adding category!" );
 
         } 
 
@@ -122,11 +122,11 @@ class CategoriesController extends Controller
             $category->childrens()->attach( $request->parent_category_id, [ 'created_at' => now(), 'updated_at' => now() ] );
 
             // redirect
-            return back()->with( 'message', "Category Updated Successfully!" );
+            return back()->with( 'message', "Category updated successfully!" );
 
         } else {
 
-            return back()->with( 'message', "Error Updating Category!" );
+            return back()->with( 'message', "Error updating category!" );
 
         } 
 
@@ -149,11 +149,11 @@ class CategoriesController extends Controller
 
         if( $category->forceDelete() ) {
 
-            return back()->with( 'message', "Category Deleted Successfully!" );
+            return back()->with( 'message', "Category deleted successfully!" );
 
         } else {
 
-            return back()->with( 'message', "Error Deleting Category!" );
+            return back()->with( 'message', "Error deleting category!" );
 
         }
 
@@ -164,11 +164,11 @@ class CategoriesController extends Controller
         
         if( $category->delete() ) {
 
-            return back()->with( 'message', "Category Trashed Successfully!" );
+            return back()->with( 'message', "Category trashed successfully!" );
 
         } else {
 
-            return back()->with( 'message', "Error Trashing Category!" );
+            return back()->with( 'message', "Error trashing category!" );
 
         }
 
@@ -191,11 +191,11 @@ class CategoriesController extends Controller
         $category = Category::onlyTrashed()->findOrFail( $id );
         if( $category->restore() ) {
 
-            return back()->with( 'message', 'Category Restored Successfully!' );
+            return back()->with( 'message', 'Category restored successfully!' );
 
         } else {
 
-            return back()->with( 'message', 'Error Restoring Category!' );
+            return back()->with( 'message', 'Error restoring category!' );
 
         }
 
@@ -213,11 +213,11 @@ class CategoriesController extends Controller
 
         if( $category->forceDelete() ) {
 
-            return back()->with( 'message', "Category Deleted Successfully!" );
+            return back()->with( 'message', "Category deleted successfully!" );
 
         } else {
 
-            return back()->with( 'message', "Error Deleting Category!" );
+            return back()->with( 'message', "Error deleting category!" );
 
         }
 

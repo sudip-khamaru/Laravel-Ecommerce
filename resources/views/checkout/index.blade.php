@@ -43,7 +43,8 @@
 	</div>
 	<div class="col-md-8 order-md-1" id="billing-address">
 		<h4 class="mb-3">Billing Address</h4>
-		<form method="POST" action="{{ route( 'checkout.store' ) }}" class="needs-validation" novalidate="">
+		<!-- <form method="POST" action="{{ route( 'checkout.store' ) }}" class="needs-validation" novalidate="" id="payment-form"> -->
+		<form method="POST" action="{{ route( 'payment.paypalPayment' ) }}" class="needs-validation" novalidate="" id="payment-form">
 			@csrf
 			<div class="row">
 				<div class="col-md-6 mb-3">
@@ -52,6 +53,11 @@
 					<div class="invalid-feedback">
 						Valid first name is required.
 					</div>
+					@if( $errors->has( 'billing_first_name' ) )
+	                  	<div class="alert alert-danger">
+	                    	{{ $errors->first( 'billing_first_name' ) }}
+	                  	</div>
+	                @endif
 				</div>
 				<div class="col-md-6 mb-3">
 					<label for="lastName">Last Name</label>
@@ -59,6 +65,11 @@
 					<div class="invalid-feedback">
 						Valid last name is required.
 					</div>
+					@if( $errors->has( 'billing_last_name' ) )
+	                  	<div class="alert alert-danger">
+	                    	{{ $errors->first( 'billing_last_name' ) }}
+	                  	</div>
+	                @endif
 				</div>
 			</div>
 
@@ -72,6 +83,11 @@
 					<div class="invalid-feedback" style="width: 100%;">
 						Your username is required.
 					</div>
+					@if( $errors->has( 'billing_username' ) )
+	                  	<div class="alert alert-danger">
+	                    	{{ $errors->first( 'billing_username' ) }}
+	                  	</div>
+	                @endif
 				</div>
 			</div>
 
@@ -81,6 +97,11 @@
 				<div class="invalid-feedback">
 					Please enter a valid email address for shipping updates.
 				</div>
+				@if( $errors->has( 'billing_email' ) )
+                  	<div class="alert alert-danger">
+                    	{{ $errors->first( 'billing_email' ) }}
+                  	</div>
+                @endif
 			</div>
 
 			<div class="mb-3">
@@ -89,11 +110,21 @@
 				<div class="invalid-feedback">
 					Please enter your shipping address.
 				</div>
+				@if( $errors->has( 'billing_address1' ) )
+                  	<div class="alert alert-danger">
+                    	{{ $errors->first( 'billing_address1' ) }}
+                  	</div>
+                @endif
 			</div>
 
 			<div class="mb-3">
 				<label for="address2">Address Line 2 <span class="text-muted">(Optional)</span></label>
 				<input type="text" name="billing_address2" class="form-control" id="address2" placeholder="Apartment or Suite">
+				@if( $errors->has( 'billing_address2' ) )
+                  	<div class="alert alert-danger">
+                    	{{ $errors->first( 'billing_address2' ) }}
+                  	</div>
+                @endif
 			</div>
 
 			<div class="row">
@@ -106,6 +137,11 @@
 					<div class="invalid-feedback">
 						Please select a valid country.
 					</div>
+					@if( $errors->has( 'billing_country' ) )
+	                  	<div class="alert alert-danger">
+	                    	{{ $errors->first( 'billing_country' ) }}
+	                  	</div>
+	                @endif
 				</div>
 				<div class="col-md-4 mb-3">
 					<label for="state">State</label>
@@ -116,6 +152,11 @@
 					<div class="invalid-feedback">
 						Please provide a valid state.
 					</div>
+					@if( $errors->has( 'billing_state' ) )
+	                  	<div class="alert alert-danger">
+	                    	{{ $errors->first( 'billing_state' ) }}
+	                  	</div>
+	                @endif
 				</div>
 				<div class="col-md-3 mb-3">
 					<label for="zip">Zip</label>
@@ -123,6 +164,11 @@
 					<div class="invalid-feedback">
 						Zip code required.
 					</div>
+					@if( $errors->has( 'billing_zip' ) )
+	                  	<div class="alert alert-danger">
+	                    	{{ $errors->first( 'billing_zip' ) }}
+	                  	</div>
+	                @endif
 				</div>
 			</div>
 
@@ -204,6 +250,19 @@
 			</div>
 
 			{{-- <hr class="mb-4"> --}}
+
+			<!-- <div class="col-md-12 order-md-1" id="payment-gateway">
+				<script src="https://js.stripe.com/v3/"></script>
+				<div class="form-row">
+				    <label for="card-element">
+				      Credit or Debit card
+				    </label>
+				    <div id="card-element">
+				    </div>
+
+				    <div id="card-errors" role="alert"></div>
+			  	</div>
+			</div> -->
 			<button class="btn btn-primary btn-lg btn-block" type="submit">Continue to Checkout</button>
 		</form>
 	</div>

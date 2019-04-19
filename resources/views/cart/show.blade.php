@@ -1,7 +1,14 @@
 @extends( 'layouts.app' )
 
 @section( 'content' )
-<h2>My Cart</h2>
+
+<div class="cart-heading">
+	<h2>My Cart</h2>
+	<a href="{{ route( 'checkout.index' ) }}" class="btn btn-sm btn-primary checkout-button">
+		<span data-feather="check-square"></span>
+		<strong>Checkout</strong>
+	</a>
+</div>
 
 @if( session()->has( 'message' ) )
 	<div class="alert alert-success">
