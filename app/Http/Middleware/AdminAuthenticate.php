@@ -16,7 +16,7 @@ class AdminAuthenticate
      */
     public function handle($request, Closure $next)
     {
-        if( Auth::user()->role->name === "customer" ) {
+        if( Auth::user()->role->name === "Customer" ) {
 
             return redirect( '/home' )->with( 'message', 'You are not allowed to access' );
 
